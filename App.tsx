@@ -9,39 +9,30 @@ import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
-  useColorScheme,
-  View,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import User from "./component/UserManagement.tsx";
-import FancyCard from "./component/userCard.tsx";
+import UserDetail from "./component/UserDetails.tsx";
+import {UserProvider} from "./hook/useUser.tsx";
 
-
+const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView>
-        <View>
-          <User/>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <UserProvider>
+      <NavigationContainer>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Stack.Navigator initialRouteName="User">
+            <Stack.Screen name="User" component={User} />
+            <Stack.Screen name="UserDetail" component={UserDetail} />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
+      </UserProvider>
   );
 }
 

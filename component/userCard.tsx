@@ -2,11 +2,11 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
 
-export default function UserCard({userName,userStatus,onPress}) {
+export default function UserCard({userName,userStatus,navigation,user}) {
 
     return (
 
-            <TouchableOpacity onPress={onPress} style={[styles.card, styles.cardElevated]} >
+            <TouchableOpacity onPress={() => navigation.navigate('UserDetail', { user })} style={[styles.card, styles.cardElevated]} >
                 <View style={styles.cardBody}>
                    <View style={styles.cardHeader}>
                        <Image

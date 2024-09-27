@@ -4,16 +4,26 @@ import {useEffect,useState} from "react";
 import {Picker} from "@react-native-picker/picker";
 import {userData} from "../assets/sampleUser.ts";
 import UserCard from "./userCard.tsx";
+import { useNavigation } from '@react-navigation/native';
+import {useUser} from "../hook/useUser.tsx";
 
 
 export default function User() {
     const [value, setValue] = useState(' ');
     const [filterUser ,setFilterUser] = useState([]);
+    const navigation = useNavigation();
+    const { state,dispatch } = useUser();
 
     useEffect(() => {
-        const filters =  userData.users.filter((user) => user.status === value);
+        // Filter users based on the selected status
+        const filters = userData.users.filter((user) => user.status === value);
         setFilterUser(filters);
-    }, [value]);
+
+        // Dispatch the selected status to update the context
+        if (filters.length > 0) {
+            dispatch({ type: 'APPROVE_USER', payload: { id: filters[0].id, name: filters[0].name } });
+        }
+    }, [value, dispatch]);
 
     useEffect(() => {
         setValue('approved'); // Set approved users initially
@@ -40,7 +50,8 @@ export default function User() {
                           key={user.id}
                           userName={user.name}
                           userStatus={user.status}
-                          onPress={() => (alert("hello"))}
+                          user={user}                    // Pass the entire user object
+                          navigation={navigation}
                       />))
                    }
                </View>
